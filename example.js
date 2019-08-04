@@ -6,8 +6,8 @@ const urls = {
 const fs = require('fs');
 const puppeteer = require('puppeteer');
 // 把下面改成你自己的用户名密码
-const acct = `sai123q@163.com`;
-const pass = `zxs360121`;
+const acct = `*****@***.com`;
+const pass = `*******`;
 
 function wait(ms) {
     return new Promise(resolve => setTimeout(() => resolve(), ms));
