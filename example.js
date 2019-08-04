@@ -1,4 +1,4 @@
-const urls = {
+﻿const urls = {
     loginPage: 'https://passport.weibo.cn/signin/login?entry=mweibo&res=wel&wm=3349&r=https%3A%2F%2Fm.weibo.cn%2F',
     photo: 'http://photo.weibo.com/' + process.argv[2] + '/talbum/index#!/mode/3/page/'
 };
@@ -6,8 +6,8 @@ const urls = {
 const fs = require('fs');
 const puppeteer = require('puppeteer');
 // 把下面改成你自己的用户名密码
-const acct = `*****@***.com`;
-const pass = `*******`;
+const acct = `*******@***.com`;
+const pass = `*********`;
 
 function wait(ms) {
     return new Promise(resolve => setTimeout(() => resolve(), ms));
@@ -38,9 +38,11 @@ async function main() {
     await page.waitForSelector("[class='photoList clearfix'] img");
     await page.waitForSelector('ul .M_txtb');
     //相册照片总数
-    var count = await page.evaluate(() => Array.from(document.querySelectorAll('ul .M_txtb'), x => x.innerText));
-    count = count[1].replace(/[^0-9]/ig, "");
+    var count = await page.evaluate(() => document.querySelector('.m_piclist ul li [title="微博配图"]').parentNode.parentNode.nextSibling.nextSibling.innerText);
+    count = count.replace(/[^0-9]/ig, "");
+    console.log(count);
     var all = [];
+    var reget = 0;
     for(i = 0;i<count;i+=32) {
         var pindex = (i/32+1);
         await page.goto(urls.photo+pindex);
@@ -51,8 +53,12 @@ async function main() {
             i -= 32;
             await page.close();
             page = await browser.newPage();
+            reget ++;
+            if(reget>=10)
+                break;
             continue;
         }
+        reget = 0;
         console.log('page ' + pindex + ' get over')
         var imgs = await page.evaluate(() => Array.from(document.querySelectorAll("[class='photoList clearfix'] img"), e => e.src));
         all = all.concat(imgs);
