@@ -50,7 +50,7 @@ async function main() {
             console.log('page' + i + ' error reopen this page');
             i--;
             await page.close();
-            page = await briowser.newPage();
+            page = await browser.newPage();
             reget ++;
             if(reget>=10)
                 break;
